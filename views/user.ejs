@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate')%>
+    <h1 class="text-center mb-5">User Details</h1>
+    <div class="row">
+
+        <div class="col-md-4 offset-md-4 ">
+            <div class="card">
+
+                <div class="card-header">
+                    <h2 class="card-title text-center">
+                        <%= user.name %>
+                    </h2>
+
+                </div>
+
+                <div class="card-header">
+                    <h5>
+                        Balance : $<%= user.current_balance %>
+                    </h5>
+
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <h5>Email :
+                            <%= user.email %>
+                        </h5>
+                    </li>
+                    <li class="list-group-item">
+                        <h5>Gender :
+                            <%= user.gender %>
+                        </h5>
+                    </li>
+                </ul>
+                <div class="card-body row">
+
+                    <a href="#" class="card-link btn btn-info mb-3 col-10 offset-1">Transfer Money</a>
+                    <br>
+                    <a href="#" class="card-link btn btn-info mb-3 col-10 offset-1">View Transactions</a>
+                    <br>
+                    <a href="/" class="card-link btn btn-info mb-3 col-10 offset-1">Home Page</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
