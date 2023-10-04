@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate')%>
+<h1 class="text-center mb-5">Transfer Money</h1>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form action="/transaction/user/<%= user._id %>" method="post">
+
+                <div class="mb-3">
+                    <label for="amount" class="form-label">Enter Amount To Be Transferred</label>
+                    <input type="number" class="form-control" id="amount" placeholder="Enter amount to pay" min="0"
+                        max="<%= user.current_balance %>" name="amount">
+                </div>
+                <div class="mb-3">
+                    <label for="receiver" class="form-label"></label>
+                    <select name="receiver" id="receiver"   class="form-select">
+                        <% for(let user of allUser){ %>
+                                <option value="<%= user.name %>" class="dropdown-item"><%= user.name %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="d-grid gap-2">
+
+                    <button class="btn btn-success">Transfer</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
