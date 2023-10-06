@@ -1,0 +1,37 @@
+<% layout('layouts/boilerplate')%>
+    <h1>Transaction Details for <%= user.name %>
+    </h1>
+    <div class="container abc">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><strong>Payer<strong></td>
+                    <td><strong>Receiver</strong></td>
+                    <td><strong>Date</strong></td>
+                    <td><strong>Amount</strong></td>
+                </tr>
+                <%= console.log(user.transaction) %>
+                    <% for(let u of user.transaction) { %>
+                        <tr>
+                            <td>
+                                <%= u.payer %>
+                            </td>
+                            <td>
+                                <%= u.receiver %>
+                            </td>
+                            <td>
+                                <%= u.date %>
+                            </td>
+                            <td>
+                                <%= u.amount %>
+                            </td>
+                        </tr>
+                        <% } %>
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="Home">
+        <a class="back" href="/">Home Page</a>
+    </div>
