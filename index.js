@@ -48,7 +48,7 @@ app.get('/success', (req, res) => {
 app.get('/history/user/:id', async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(id).populate("transaction")
-    console.log(user)
+
     res.render("history", { user });
 })
 
