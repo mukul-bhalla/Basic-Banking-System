@@ -1,15 +1,18 @@
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
+
 const express = require('express');
 const app = express();
 const path = require('path')
-const bodyParser = require('body-parser');
+const ejsMate = require('ejs-mate');
+
 const User = require('./models/user')
 const Transactions = require('./models/transactions')
-const ejsMate = require('ejs-mate');
-const mongoose = require('mongoose');
+
+
 const dbUrl = process.env.DB_URL
+const mongoose = require('mongoose');
 mongoose.connect(dbUrl)
     .then(() => {
         console.log("MongoDB Connected!");
@@ -17,9 +20,12 @@ mongoose.connect(dbUrl)
     .catch((error) => {
         console.error("MongoDB Connection Error:", error);
     });
+
 app.engine('ejs', ejsMate);
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true }));
 
@@ -47,17 +53,15 @@ app.get('/history/user/:id', async (req, res) => {
 })
 
 app.post('/transaction/user/:id', async (req, res) => {
-    // console.log(req.body)
+
     const { id } = req.params;
     const { receiver } = req.body;
     const amount = parseInt(req.body.amount)
     const send = await User.findById(id);
-    // console.log(req.body)
+
     if (send.current_balance < amount) {
-        console.log("Inside If")
         res.redirect("/error")
     }
-    // console.log("Outside if")
     const receive = await User.findOne({ name: receiver });
     const sendBalance = send.current_balance;
     const receiveBalance = receive.current_balance;
@@ -68,7 +72,7 @@ app.post('/transaction/user/:id', async (req, res) => {
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
 
-    // This arrangement can be altered based on how we want the date's format to appear.
+
     let currentDate = `${day}-${month}-${year}`;
     const transact = new Transactions({
         payer: send.name,
@@ -76,8 +80,10 @@ app.post('/transaction/user/:id', async (req, res) => {
         amount: amount,
         date: currentDate
     })
-    await transact.save();
+
     send.transaction.push(transact)
+    await send.save()
+    await transact.save();
     await User.findByIdAndUpdate(id, { current_balance: sendBalance - amount });
     await User.findByIdAndUpdate(receiverId, { current_balance: receiveBalance + amount });
 
@@ -92,6 +98,11 @@ app.get('/transaction/user/:id', async (req, res) => {
     res.render("transaction", { user, allUser });
 
 })
+
+app.get("*", function (req, res) {
+    res.send("No Page Found!");
+});
+
 
 app.listen(3000, () => {
     console.log("Listening at port 3000")
